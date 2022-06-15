@@ -21,7 +21,7 @@ def inicio_place(arg):
 
 def fim_place(arg, master):
     global x1, y1
-    print(f'Copiado! Layout.function(var,frame,text,{arg.x - x1},{arg.y - y1},{x1},{y1})')
+    print(f'Copiado! .place(width={arg.x - x1}, height={arg.y - y1}, x={x1}, y={y1})')
     master.clipboard_clear()
     master.clipboard_append(f'.place(width={arg.x - x1}, height={arg.y - y1}, x={x1}, y={y1})')
 

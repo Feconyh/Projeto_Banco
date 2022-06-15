@@ -3,8 +3,8 @@ import HelpPlace
 
 root = Tk()
 root.title('Cadastro')
-root.geometry('1280x720+300+300')
-root.iconbitmap(default="image/player.ico")
+root.geometry('600x900+300+300')
+root.iconbitmap(default="Projeto_Banco\image\player.ico")
 root.resizable(width=False, height=False)
 
 root.bind('<Button-1>', HelpPlace.inicio_place)
@@ -12,37 +12,10 @@ root.bind('<ButtonRelease-1>', lambda arg: HelpPlace.fim_place(arg, root))
 root.bind('<Button-2>', lambda arg: HelpPlace.para_geometry(root))
 
 class Layout:
-    def __init__(self):
-        super().__init__()
-        # função titulo,| nome da var, texto da var, cordenadas y, x |
-        @staticmethod
-        def title(var, frame,text,width,height,x,y):
-            var = Label(frame, bg='gray', text=text)
-            var.place(width=width, height=height, x=x, y=y)
-
-        # função caption,| nome da var, texto da var, cordenadas y, x |
-        @staticmethod
-        def caption(var, frame,text,width,height,x,y):
-            var = Label(frame, bg='gray', text=text)
-            var.place(width=width, height=height, x=x, y=y)
-
-        @staticmethod
-        def entry(var, frame,width,height,x,y, show=''):
-            var = Entry(frame, show=show)
-            var.place(width=width, height=height, x=x, y=y)
-
-        @staticmethod
-        def button(var, frame,text,command,width,height,x,y):
-            var = Button(frame, text=text, command=command)
-            var.place(width=width, height=height, x=x, y=y)
-
-        @staticmethod
-        def chckbttn(var, frame,text,width,height,x,y):
-            var = Checkbutton(frame, bg='gray', text=text, width=15)
-            var.place(width=width, height=height, x=x, y=y)
+    pass
 
 class Command:
-
+    
     @staticmethod
     def clear():
         for widget in root.winfo_children():
@@ -54,18 +27,32 @@ class Command:
     def confirm_withdraw():
         pass
 
-class Screen:
+class Screen():
 
     @staticmethod
-    def login():
-        # Limpa e cria o layout primeira tela
-        Command.clear()
+    def login(self):
 
-        frame = Frame(root, bg='gray', borderwidth=2, relief='groove')
+        self.frame = Frame(root, bg='blue')
+        self.frame.place(side = LEFT)
 
-        '''
-        Layout da tela
-        '''
+        self.login_lb = Label(self.frame,text='Login',bg='blue', fg='orange')
+        self.login_lb.place(width=83, height=28, x=29, y=36)
+        
+        self.user_lb = Label(self.frame,text='Login',bg='blue', fg='white')
+        self.user_lb.place(width=83, height=28, x=29, y=36)
+        
+        self.password_lb = Label(self.frame,text='Login',bg='blue', fg='white')
+        self.password_lb.place(width=83, height=28, x=29, y=36)
+
+
+        self.user_ent = Entry(self.frame,text='Login')
+        self.user_ent.place(width=83, height=28, x=29, y=36)
+
+        self.password_ent = Entry(self.frame,text='Login')
+        self.password_ent.place(width=83, height=28, x=29, y=36)
+        
+        self.login_btn = Button(self.frame,text='Login',bg='orange', fg='white')
+        self.login_btn.place(width=83, height=28, x=29, y=36)
 
     @staticmethod
     def user():
