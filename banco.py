@@ -34,10 +34,10 @@ class Screen():
         self.password_log.place(width=140, height=50, x=30, y=400)
         
 
-        self.user_ent = tk.Entry(self,text='Login')
+        self.user_ent = tk.Entry(self)
         self.user_ent.place(width=180, height=20, x=30, y=320)
 
-        self.password_ent = tk.Entry(self,text='Login')
+        self.password_ent = tk.Entry(self)
         self.password_ent.place(width=180, height=20, x=30, y=460)
 
         self.login_btn = tk.Button(self, bd=0, image=self.button_login, command=Command.clear)
