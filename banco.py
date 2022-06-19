@@ -44,6 +44,37 @@ class Screen():
         self.login_btn.place(width=300, height=118, x=30, y=520)
    
     @staticmethod
+    def adm(self):
+        self.configure(bg='#ec7001')
+    
+        self.header_user = tk.Label(self, bd=0, image=self.header)
+        self.header_user.place(width=720, height=200, x=0, y=0)
+
+        self.historic_user = tk.Button(self, bd=0, image=self.historic)
+        self.historic_user.place(width=720, height=100, x=0, y=200)
+
+
+        self.extract_btn = tk.Button(self, bd=0, image=self.extract)
+        self.extract_btn.place(width=225, height=140, x=50, y=340)
+
+        self.deposit_btn = tk.Button(self, bd=0, image=self.deposit)
+        self.deposit_btn.place(width=225, height=140, x=410, y=340)
+        
+        self.withdrawal_btn = tk.Button(self, bd=0, image=self.withdrawal)
+        self.withdrawal_btn.place(width=225, height=140, x=50, y=520)
+        
+        self.transfer_btn = tk.Button(self, bd=0, image=self.transfer)
+        self.transfer_btn.place(width=225, height=140, x=410, y=520)
+        
+        self.exit_btn = tk.Button(self, bd=0, image=self.exit)
+        self.exit_btn.place(width=225, height=140, x=50, y=700)
+
+        self.cuie_user = tk.Label(self, bd=0, image=self.cuie)
+        self.cuie_user.place(width=225, height=200, x=410, y=700)
+
+        self.bottom_bar_user = tk.Label(self, bd=0, image=self.bottom_bar)
+        self.bottom_bar_user.place(width=720, height=100, x=0, y=900)
+
     def user(self):
         self.configure(bg='#ec7001')
     
@@ -138,6 +169,6 @@ if __name__ == "__main__":
 
     app = App()
 
-    Screen.user(app)
+    Screen.adm(app)
 
     app.mainloop()
