@@ -1,63 +1,174 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter.messagebox import showerror
 
 
-class TemperatureConverter:
-    @staticmethod
-    def fahrenheit_to_celsius(f):
-        return (f - 32) * 5 / 9
+# Parte do Banco
 
+class Client:
+    Users = []
 
-class ConverterFrame(ttk.Frame):
-    def __init__(self, container):
-        super().__init__(container)
-        # field options
-        options = {'padx': 5, 'pady': 5}
+    def __init__(self, name, cpf, age, phonenumber, accountnumber, password, balance):
+        self.name = name
+        self.cpf = cpf
+        self.age = age
+        self.phonenumber = phonenumber
 
-        # temperature label
-        self.temperature_label = ttk.Label(self, text='Fahrenheit')
-        self.temperature_label.grid(column=0, row=0, sticky=tk.W, **options)
+        self.accountnumber = accountnumber
+        self.password = password
+        self.balance = balance
+        self.history = []
 
-        # temperature entry
-        self.temperature = tk.StringVar()
-        self.temperature_entry = ttk.Entry(self, textvariable=self.temperature)
-        self.temperature_entry.grid(column=1, row=0, **options)
-        self.temperature_entry.focus()
+    def deposit(self, amount):
 
-        self.convert_button = ttk.Button(self, text='Convert')
-        self.convert_button['command'] = self.convert
-        self.convert_button.grid(column=2, row=0, sticky=tk.W, **options)
+        if amount not in '1234568790.':
+            return False
+        elif amount <= 0:
+            return False
+        else:
+            self.balance += amount
+            return True
 
-        # result label
-        self.result_label = ttk.Label(self)
-        self.result_label.grid(row=1, columnspan=3, **options)
+    def withdrawal(self, amount):
 
-        # add padding to the frame and show it
-        self.grid(padx=10, pady=10, sticky=tk.NSEW)
+        if amount not in '1234568790.':
+            return False
+        elif amount <= 0:
+            return False
+        elif amount > self.balance:
+            return False
+        else:
+            self.balance -= amount
+            return True
 
-    def convert(self):
-        """  Handle button click event
-        """
-        try:
-            f = float(self.temperature.get())
-            c = TemperatureConverter.fahrenheit_to_celsius(f)
-            result = f'{f} Fahrenheit = {c:.2f} Celsius'
-            self.result_label.config(text=result)
-        except ValueError as error:
-            showerror(title='Error', message=error)
+    def transfer(self, amount, subject):
+        if amount not in '1234568790.':
+            return False
+        elif amount <= 0:
+            return False
+        elif amount > self.balance:
+            return False
+        else:
+            subject.balance += amount
+            self.balance -= amount
+            return True
+
+    def history(self, transfer, amount, who):
+        if transfer == 1:
+            self.history.append(f'Deposit of {amount}')
+        if transfer == 2:
+            self.history.append(f'Withdrawal of {amount}')
+        if transfer == 3:
+            self.history.append(f'Transfer of {amount} to acount{who}')
+
+# UI/HUD stuff
 
 
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
 
-        self.title('Temperature Converter')
-        self.geometry('300x70')
+        self.geometry('720x1000+610+0')
+        self.title('Bank App')
         self.resizable(False, False)
 
+        self.curr_screen = None
 
-if __name__ == "__main__":
+    def clear(self):
+        for widget in self.winfo_children():
+            widget.destroy()
+
+    def screen_one(self):
+        self.clear()
+        self.curr_screen = LoginScreen(self, True)
+
+    def screen_two(self):
+        self.clear()
+        self.curr_screen = UserLoggedScreen(self, True)
+
+    def screen_three(self):
+        self.clear()
+        self.curr_screen = CreditsScreen(self, True)
+
+    def screen_four(self):
+        self.clear()
+        self.curr_screen = DepositScreen(self, True)
+
+    def screen_five(self):
+        self.clear()
+        self.curr_screen = WithdrawalScreen(self, True)
+
+    def screen_six(self):
+        self.clear()
+        self.curr_screen = TransferScreen(self, True)
+
+
+class LoginScreen(ttk.Frame):
+    def __init__(self, root, render=False):
+        super().__init__(root)
+        if render:
+            self.pack()
+            lbl = ttk.Label(self, text='Tela 1')
+            lbl.pack()
+            bttn = ttk.Button(self, text='Mudar tela', command=app.screen_two)
+            bttn.pack()
+
+
+class UserLoggedScreen(ttk.Frame):
+    def __init__(self, root, render=False):
+        super().__init__(root)
+        if render:
+            self.pack()
+            lbl = ttk.Label(root, text='Tela 2')
+            lbl.pack()
+            bttn = ttk.Button(self, text='Mudar tela', command=app.screen_three)
+            bttn.pack()
+
+
+class CreditsScreen(ttk.Frame):
+    def __init__(self, root, render=False):
+        super().__init__(root)
+        if render:
+            self.pack()
+            lbl = ttk.Label(root, text='Tela 3')
+            lbl.pack()
+            bttn = ttk.Button(self, text='Mudar tela', command=app.screen_four)
+            bttn.pack()
+
+
+class DepositScreen(ttk.Frame):
+    def __init__(self, root, render=False):
+        super().__init__(root)
+        if render:
+            self.pack()
+            lbl = ttk.Label(root, text='Tela 4')
+            lbl.pack()
+            bttn = ttk.Button(self, text='Mudar tela', command=app.screen_five)
+            bttn.pack()
+
+
+class WithdrawalScreen(ttk.Frame):
+    def __init__(self, root, render=False):
+        super().__init__(root)
+        if render:
+            self.pack()
+            lbl = ttk.Label(root, text='Tela 5')
+            lbl.pack()
+            bttn = ttk.Button(self, text='Mudar tela', command=app.screen_six)
+            bttn.pack()
+
+
+class TransferScreen(ttk.Frame):
+    def __init__(self, root, render=False):
+        super().__init__(root)
+        if render:
+            self.pack()
+            lbl = ttk.Label(root, text='Tela 6')
+            lbl.pack()
+            bttn = ttk.Button(self, text='Mudar tela', command=app.screen_one)
+            bttn.pack()
+
+
+if __name__ == '__main__':
     app = App()
-    ConverterFrame(app)
+    app.screen_one()
     app.mainloop()
