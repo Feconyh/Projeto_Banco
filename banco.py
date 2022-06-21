@@ -58,17 +58,33 @@ class Client:
         if transfer == 3:
             self.history.append(f'Transfer of {amount} to acount{who}')
 
+class Users:
+    usercount = 0
+    userwheel = []
+
+    @staticmethod
+    def create_user(name, cpf, age, phonenumber, accountnumber, password, balance):
+        Users.userwheel.append(Users.usercount)
+        Users.userwheel[Users.usercount] = Client(name, cpf, age, phonenumber, accountnumber, password, balance)
+        Users.usercount += 1
+
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
 
         self.geometry("720x1000+610+0")
+        def move_window(event):
+            self.geometry('+{0}+{1}'.format(event.x_root, event.y_root))
+        self.overrideredirect(True)
+
         self.title('Bank App')
         self.iconbitmap(default="image\player.ico")
         self.resizable(width=False, height=False)
 
         self.curr_screen = None
-        
+
+        self.bind('<B1-Motion>', move_window)
+
         self.bind('<Button-1>', HelpPlace.inicio_place)
         self.bind('<ButtonRelease-1>', lambda arg: HelpPlace.fim_place(arg, self))
         self.bind('<Button-2>', lambda arg: HelpPlace.para_geometry(self))
@@ -88,10 +104,10 @@ class App(tk.Tk):
     def screen_three(self):
         self.clear()
         self.curr_screen = AdmLoggedScreen(self, True)
-#
-#    def screen_four(self):
-#        self.clear()
-#        self.curr_screen = DepositScreen(self, True)
+
+    def screen_four(self):
+        self.clear()
+        self.curr_screen = RegisterScreen(self, True)
 #
 #    def screen_five(self):
 #        self.clear()
@@ -107,51 +123,32 @@ class LoginScreen(tk.Frame):
         if render:
 
             # importação de imagem da tela de login
-            self.tumb_one = PhotoImage(file="image/Tumb.png")
-            self.entry = PhotoImage(file='image/entry.png')
-            self.login = PhotoImage(file='image/login.png')
-            self.user = PhotoImage(file='image/usuario.png')
-            self.password = PhotoImage(file='image/senha.png')
+            self.backgournd_login = PhotoImage(file="image/background_login.png")
             self.button_login = PhotoImage(file='image/button_login.png')
 
             root.configure(bg='#0231a0')
 
-            self.tumb_log = tk.Label(root, image=self.tumb_one)
-            self.tumb_log.place(width=360, height=1000, x=360, y=0)
+            self.background = tk.Label(root, image=self.backgournd_login)
+            self.background.place(width=720, height=1000, x=0, y=0)
 
-            self.login_log = tk.Label(root, image=self.login)
-            self.login_log.place(width=175, height=69, x=30, y=36)
+            self.user_ent = tk.Entry(root)
+            self.user_ent.place(width=275, height=50, x=20, y=240)
+            self.user_ent.config(font='Arieal 20', bd=0,bg= "#0231A0", fg='#ffffff')
 
-            self.user_log = tk.Label(root, image=self.user)
-            self.user_log.place(width=180, height=50, x=30, y=260)
-
-            self.password_log = tk.Label(root, image=self.password)
-            self.password_log.place(width=140, height=50, x=30, y=400)
-
-            
-            self.user_ent = tk.Entry(root, highlightthickness=2)
-            self.user_ent.place(width=300, height=40, x=30, y=320)
-            self.user_ent.config(highlightbackground = "#f65a05", bg= "#0231a0", fg='#ffffff')
-
-            self.password_ent = tk.Entry(root, highlightthickness=2)
-            self.password_ent.place(width=300, height=40, x=30, y=460)
-            self.password_ent.config(highlightbackground = "#f65a05", bg= "#0231a0", fg='#ffffff', show='*')
+            self.password_ent = tk.Entry(root)
+            self.password_ent.place(width=275, height=50, x=20, y=360)
+            self.password_ent.config(font='Arieal 20', bd=0,bg= "#0231A0", fg='#ffffff', show='*')
 
             self.login_btn = tk.Button(root, bd=0, image=self.button_login, command=app.screen_two)
-            self.login_btn.place(width=300, height=118, x=30, y=520)
+            self.login_btn.place(width=230, height=100, x=12, y=510)
    
 class UserLoggedScreen(tk.Frame):
     def __init__(self, root, render=False):
         super().__init__(root)
         if render:
 
-#            self.pack()
-#            lbl = tk.Label(root, text='Tela 2')
-#            lbl.pack()
-#            bttn = tk.Button(root, text='Mudar tela', command=app.screen_three)
-#            bttn.pack()
-
-            # importação de imagem da tela de User
+            # importação de imagem da tela de user
+            
             self.header = PhotoImage(file='image/header.png')
             self.historic = PhotoImage(file='image/historic.png')
 
@@ -238,13 +235,48 @@ class AdmLoggedScreen(tk.Frame):
             self.exit_btn = tk.Button(root, bd=0, image=self.exit, command=app.screen_one)
             self.exit_btn.place(width=225, height=140, x=50, y=700)
 
-            self.adm_settings = tk.Button(root, bd=0, image=self.adm)
+            self.adm_settings = tk.Button(root, bd=0, image=self.adm, command=app.screen_four)
             self.adm_settings.place(width=225, height=140, x=410, y=700)
 
             self.bottom_bar_user = tk.Label(root, bd=0, image=self.bottom_bar)
             self.bottom_bar_user.place(width=720, height=100, x=0, y=900) 
+
+class RegisterScreen(tk.Frame):
+    def __init__(self, root, render=False):
+        super().__init__(root)
+        if render:
+
+            # importação de imagem da tela de cadastro
+            self.background_register = PhotoImage(file='image/background_register.png')
     
+            self.background = tk.Label(root, bd=0, image=self.background_register)
+            self.background.place(width=720, height=1000, x=0, y=0)
+
+            self.nome_ent = tk.Entry(root)
+            self.nome_ent.place(width=360, height=42, x=228, y=233)
+            self.nome_ent.config(font='Arieal 20', bd=0,bg= "#0231A0", fg='#ffffff')
+            
+            self.cpf_ent = tk.Entry(root)
+            self.cpf_ent.place(width=360, height=42, x=230, y=322)
+            self.cpf_ent.config(font='Arieal 20', bd=0,bg= "#0231A0", fg='#ffffff')
+
+            self.idade_ent = tk.Entry(root)
+            self.idade_ent.place(width=101, height=42, x=228, y=407)
+            self.idade_ent.config(font='Arieal 20', bd=0,bg= "#0231A0", fg='#ffffff')
+
+            self.telefone_ent = tk.Entry(root)
+            self.telefone_ent.place(width=361, height=45, x=228, y=499)
+            self.telefone_ent.config(font='Arieal 20', bd=0,bg= "#0231A0", fg='#ffffff')
+
+            self.senha_ent = tk.Entry(root)
+            self.senha_ent.place(width=361, height=43, x=228, y=592)
+            self.senha_ent.config(font='Arieal 20', bd=0,bg= "#0231A0", fg='#ffffff')
+
+
 if __name__ == "__main__":
+
+    Users.create_user('name', 'cpf', 'age', 'phonenumber', 'accountnumber', 'password', 'balance')
+    Users.create_user('name', 'cpf', 'age', 'phonenumber', 'accountnumber', 'password', 'balance')
 
     app = App()
     app.screen_one()
