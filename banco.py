@@ -5,11 +5,12 @@ import HelpPlace
 class Client:
     Users = []
 
-    def __init__(self, name, cpf, age, phonenumber, accountnumber, password, balance):
+    def __init__(self, name, cpf, age, phonenumber, accountnumber, password, balance,admin = False):
         self.name = name
         self.cpf = cpf
         self.age = age
         self.phonenumber = phonenumber
+        self.admin = admin
 
         self.accountnumber = accountnumber
         self.password = password
@@ -61,6 +62,11 @@ class Client:
 class Users:
     usercount = 0
     userwheel = []
+
+    @staticmethod
+    def 
+
+    
 
     @staticmethod
     def create_user(name, cpf, age, phonenumber, accountnumber, password, balance):
