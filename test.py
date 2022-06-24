@@ -1,27 +1,23 @@
-import tkinter as tk
 from tkinter import *
+import tkinter as tk
 
-root = Tk()
 
-def move_window(event):
-    root.geometry('+{0}+{1}'.format(event.x_root, event.y_root))
+top = Tk()
 
-root.overrideredirect(True) # turns off title bar, geometry
-root.geometry('400x100+200+200') # set new geometry
+user_label = Label(top, text="User Name")
+user_label.grid(row=0, column=0)
 
-# make a frame for the title bar
-title_bar = Frame(root, bg='orange', bd=2)
+username = Entry(top, bd = 5)
+username.grid(row=0, column=1)
 
-# put a close button on the title bar
-close_button = Button(title_bar, text='X', command=root.destroy)
 
-# a canvas for the main area of the window
+def check_vincent():
+    if username.get() == "Vincent":
+        print ("Hi, Vincent!")
+    else:
+        print( "Where's Vincent?")
 
-# pack the widgets
-title_bar.pack(expand=1, fill=X)
-close_button.pack(side=RIGHT)
+submit_btn = Button(top, text="Submit", width=10, command=check_vincent)
+submit_btn.grid(row=3, column=1)
 
-# bind title bar motion to the move window function
-title_bar.bind('<B1-Motion>', move_window)
-
-root.mainloop()
+top.mainloop()
