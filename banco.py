@@ -1,13 +1,9 @@
-from re import A
 import tkinter as tk
 from tkinter import *
-
-import HelpPlace
 import random
 
 class Client:
     users = []
-
     def __init__(self, name, cpf, age, phonenumber,admin = False,accountnumber=0,password=0,balance=0):
         self.name = name
         self.cpf = cpf
@@ -17,43 +13,34 @@ class Client:
 
         self.accountnumber = Users.usercount
         self.password = password
-        if password == 0:
-            self.password = random.randint(0,1000)
+        if password == 0: self.password = random.randint(0,1000)
         self.balance = balance
         self.history = []
 
     def tran(self, transfer, amount, who=None):
-        if transfer == 1:
-            self.history.append(f'Deposit of {amount}')
-        if transfer == 2:
-            self.history.append(f'Withdrawal of {amount}')
-        if transfer == 3:
-            self.history.append(f'Transfer of {amount} to acount{who}')
+        if transfer == 1: self.history.append(f'Deposit of {amount}')
+        if transfer == 2: self.history.append(f'Withdrawal of {amount}')
+        if transfer == 3: self.history.append(f'Transfer of {amount} to account{who}')
 
     def deposit(self, amount):
-        
         try:
             amount = int(amount)
-            if amount <= 0:
-                return False
+            if amount <= 0: return False
             else:
                 self.tran(1,amount)
                 self.balance += amount
                 return True
-        except:
-            return False
+        except: return False
 
     def withdrawal(self, amount):
         try:
             amount = int(amount)
-            if amount <= 0 or  amount > self.balance:
-                return False
+            if amount <= 0 or  amount > self.balance: return False
             else:
                 self.tran(2,amount)
                 self.balance -= amount
                 return True
-        except:
-            return False
+        except: return False
 
     def transfer(self, amount, subject):
         try:
@@ -62,15 +49,13 @@ class Client:
             subject = int(subject)
             user_id = Users.userwheel[subject]  
 
-            if self.accountnumber == user_id.accountnumber or amount <= 0 or amount > self.balance:
-                return False
+            if self.accountnumber == user_id.accountnumber or amount <= 0 or amount > self.balance: return False
             else:
                 self.tran(3,str(amount),str(subject))
                 user_id.balance += amount
                 self.balance -= amount
                 return True
-        except:
-            return False
+        except: return False
 
 class Users:
     usercount = 0
@@ -87,21 +72,11 @@ class App(tk.Tk):
         super().__init__()
 
         self.geometry("720x1000+610+0")
-        def move_window(event):
-                self.geometry('+{0}+{1}'.format(event.x_root, event.y_root))
-        self.overrideredirect(False)
-
         self.title('Bank App')
         self.iconbitmap(default="image\player.ico")
         self.resizable(width=False, height=False)
 
         self.curr_screen = None
-
-        #self.bind('<B1-Motion>', move_window)
-
-        self.bind('<Button-1>', HelpPlace.inicio_place)
-        self.bind('<ButtonRelease-1>', lambda arg: HelpPlace.fim_place(arg, self))
-        self.bind('<Button-2>', lambda arg: HelpPlace.para_geometry(self))
 
     def clear(self):
         for widget in self.winfo_children():
@@ -110,28 +85,21 @@ class App(tk.Tk):
     def screen_one(self):
         self.clear()
         self.curr_screen = LoginScreen(self,True)
-
     def screen_two(self,user_id):
         self.clear()
         self.curr_screen = UserLoggedScreen(self, user_id, True)
-        
     def screen_three(self,user_id):
-
         self.clear()
         self.curr_screen = AdmLoggedScreen(self, user_id, True)
-
     def screen_four(self):
         self.clear()
         self.curr_screen = RegisterScreen(self, True)
-
     def screen_five(self,user_id):
         self.clear()
         self.curr_screen = DepositScreen(self, user_id, True)
-
     def screen_six(self,user_id):
         self.clear()
         self.curr_screen = WithdrawalScreen(self, user_id,True)
-
     def screen_seven(self,user_id):
         self.clear()
         self.curr_screen = TransferScreen(self, user_id, True)
@@ -175,26 +143,20 @@ class UserLoggedScreen(tk.Frame):
         if render:
 
             self.root = root
+            root.configure(bg='#ec7001')
             self.user = Users.userwheel[user_id]
             self.user_id = user_id
 
-            # importação de imagem da tela de user
             self.header = PhotoImage(file='image/header.png')
             self.historic = PhotoImage(file='image/historic.png')
-
             self.extract = PhotoImage(file='image/extrato.png')
             self.deposit = PhotoImage(file='image/deposit.png')
             self.withdrawal = PhotoImage(file='image/withdrawal.png')
             self.transfer = PhotoImage(file='image/transfer.png')
             self.exit = PhotoImage(file='image/exit.png')
-
             self.olho = PhotoImage(file='image/olho.png')
-
             self.cuie = PhotoImage(file='image/cuie.png')
-
             self.bottom_bar = PhotoImage(file='image/bottom_bar.png')
-
-            root.configure(bg='#ec7001')
 
             self.header_user = tk.Label(root, bd=0, image=self.header)
             self.header_user.place(width=720, height=200, x=0, y=0)
@@ -243,14 +205,9 @@ class UserLoggedScreen(tk.Frame):
             self.ocult = tk.Button(root, bd=0, image=self.olho, command=self.botao_saldo)
             self.ocult.place(width=75, height=50, x=224, y=130)
 
-    def botao_deposito(self):
-        app.screen_five(self.user_id)
-
-    def botao_withdrawal(self):
-        app.screen_six(self.user_id)
-
-    def botao_transfer(self):
-        app.screen_seven(self.user_id)
+    def botao_deposito(self): app.screen_five(self.user_id)
+    def botao_withdrawal(self): app.screen_six(self.user_id)
+    def botao_transfer(self): app.screen_seven(self.user_id)
 
     def botao_saldo(self):
         if self.hidden == False:
@@ -262,9 +219,8 @@ class UserLoggedScreen(tk.Frame):
         elif self.hidden == True:
             self.show = Label(self.root,text='EasterEgg')
             self.show.place(width=205, height=55, x=15, y=127)
-            self.show.configure(bg='#4b4e53', fg='#4b4e53')
+            self.show.configure(bg='#4b4e53', fg='#4c4e50')
             self.hidden = False
-
 
 class AdmLoggedScreen(tk.Frame):
     def __init__(self, root, user_id, render=False):
@@ -272,26 +228,20 @@ class AdmLoggedScreen(tk.Frame):
         if render:
 
             self.root = root
+            root.configure(bg='#ec7001')
             self.user = Users.userwheel[user_id]
             self.user_id = user_id
 
-            # importação de imagem da tela de Adm
             self.header = PhotoImage(file='image/header.png')
             self.historic = PhotoImage(file='image/historic.png')
-
             self.extract = PhotoImage(file='image/extrato.png')
             self.deposit = PhotoImage(file='image/deposit.png')
             self.withdrawal = PhotoImage(file='image/withdrawal.png')
             self.transfer = PhotoImage(file='image/transfer.png')
             self.exit = PhotoImage(file='image/exit.png')
-
             self.olho = PhotoImage(file='image/olho.png')
-
             self.adm = PhotoImage(file='image/adm_settings.png')
-
             self.bottom_bar = PhotoImage(file='image/bottom_bar.png')
-
-            root.configure(bg='#ec7001')
 
             self.header_user = tk.Label(root, bd=0, image=self.header)
             self.header_user.place(width=720, height=200, x=0, y=0)
@@ -340,14 +290,9 @@ class AdmLoggedScreen(tk.Frame):
             self.ocult = tk.Button(root, bd=0, image=self.olho, command=self.botao_saldo)
             self.ocult.place(width=75, height=50, x=224, y=130)
 
-    def botao_deposito(self):
-        app.screen_five(self.user_id)
-
-    def botao_withdrawal(self):
-        app.screen_six(self.user_id)
-
-    def botao_transfer(self):
-        app.screen_seven(self.user_id)
+    def botao_deposito(self): app.screen_five(self.user_id)
+    def botao_withdrawal(self): app.screen_six(self.user_id)
+    def botao_transfer(self): app.screen_seven(self.user_id)
 
     def botao_saldo(self):
         if self.hidden == False:
@@ -359,16 +304,14 @@ class AdmLoggedScreen(tk.Frame):
         elif self.hidden == True:
             self.show = Label(self.root,text='EasterEgg')
             self.show.place(width=205, height=55, x=15, y=127)
-            self.show.configure(bg='#4b4e53', fg='#4b4e53')
+            self.show.configure(bg='#4b4e53', fg='#4c4e50')
             self.hidden = False
 
-    
 class RegisterScreen(tk.Frame):
     def __init__(self, root, render=False):
         super().__init__(root)
         if render:
 
-            # importação de imagem da tela de cadastro
             self.background_register = PhotoImage(file='image/background_register.png')
             self.button_create = PhotoImage(file='image/button_create.png')
             
@@ -399,10 +342,8 @@ class RegisterScreen(tk.Frame):
             self.create.place(width=445, height=115, x=166, y=710)
 
     def cadrastar(self):
-
         Users.create_user(self.nome_ent.get(), self.cpf_ent.get(), self.idade_ent.get(), self.telefone_ent.get(),False,0,self.senha_ent.get())
         app.screen_two(Users.usercount-1)
-
 
 class DepositScreen(tk.Frame):
     def __init__(self, root, user_id, render=False):
@@ -411,131 +352,141 @@ class DepositScreen(tk.Frame):
             self.user = Users.userwheel[user_id]
             self.user_id = user_id
 
-            self.background_register = PhotoImage(file='image/background_register.png')
-            self.button_create = PhotoImage(file='image/button_create.png')
+            self.background_deposit = PhotoImage(file='image/background_deposit.png')
+            self.button_deposit = PhotoImage(file='image/button_deposit.png')
+            self.button_back = PhotoImage(file='image/button_back.png')
             
-            #self.background = tk.Label(root, bd=0, image=self.background_register)
-            #self.background.place(width=720, height=1000, x=0, y=0)
-
-            self.saldo = Label(root, text=self.user.balance)
-            self.saldo.place(width=205, height=55, x=15, y=127)
-            self.saldo.configure(bg='#0231a0', fg='#f7f91f', font='Arieal 20')
+            self.background = tk.Label(root, bd=0, image=self.background_deposit)
+            self.background.place(width=720, height=1000, x=0, y=0)
 
             self.quantia = tk.Entry(root)
-            self.quantia.place(width=360, height=42, x=228, y=233)
-            self.quantia.config(font='Arieal 20', bd=0,bg= "#0231A0", fg='#ffffff')
+            self.quantia.place(width=570, height=54, x=70, y=369)
+            self.quantia.config(font='Arieal 20', bd=0,bg= "#ec7001", fg='#013397')
 
-            self.deposito = tk.Button(root, bd=0, image=self.button_create,command=self.deposit)
-            self.deposito.place(width=445, height=115, x=166, y=710)
+            self.deposito = tk.Button(root, bd=0, image=self.button_deposit,command=self.deposit)
+            self.deposito.place(width=417, height=90, x=145, y=520)
 
-            self.back = tk.Button(root, bd=0, image=self.button_create,command=self.sair)
-            self.back.place(width=365, height=97, x=176, y=890)
+            self.back = tk.Button(root, bd=0, image=self.button_back,command=self.sair)
+            self.back.place(width=417, height=90, x=147, y=648)
             
     def deposit(self):
 
-        if self.user.deposit(self.quantia.get()) == True:
-            print('foi de certo tudobom')
-        else:
-            print('algo deu errado na chamada')
+        if self.user.deposit(self.quantia.get()) == True: print('foi de certo tudobom')
+        else: print('algo deu errado na chamada')
 
     def sair(self):
-        if self.user.admin == False:
-            app.screen_two(self.user_id)
-        elif self.user.admin == True:
-            app.screen_three(self.user_id)
-
+        if self.user.admin == False: app.screen_two(self.user_id)
+        elif self.user.admin == True: app.screen_three(self.user_id)
 
 class WithdrawalScreen(tk.Frame):
     def __init__(self, root, user_id, render=False):
         super().__init__(root)
         if render:
 
+            self.root = root
             self.user = Users.userwheel[user_id]
             self.user_id = user_id
 
-            self.background_register = PhotoImage(file='image/background_register.png')
-            self.button_create = PhotoImage(file='image/button_create.png')
+            self.background_withdrawal = PhotoImage(file='image/background_withdrawal.png')
+            self.olho = PhotoImage(file='image/olho2.png')
+            self.button_withdrawal = PhotoImage(file='image/button_withdrawal.png')
+            self.button_back = PhotoImage(file='image/button_back.png')
             
-            #self.background = tk.Label(root, bd=0, image=self.background_register)
-            #self.background.place(width=720, height=1000, x=0, y=0)
-
-            self.saldo = Label(root, text=self.user.balance)
-            self.saldo.place(width=205, height=55, x=15, y=127)
-            self.saldo.configure(bg='#0231a0', fg='#f7f91f', font='Arieal 20')
+            self.background = tk.Label(root, bd=0, image=self.background_withdrawal)
+            self.background.place(width=720, height=1000, x=0, y=0)
 
             self.quantia = tk.Entry(root)
-            self.quantia.place(width=360, height=42, x=228, y=233)
-            self.quantia.config(font='Arieal 20', bd=0,bg= "#0231A0", fg='#ffffff')
+            self.quantia.place(width=574, height=57, x=69, y=365)
+            self.quantia.config(font='Arieal 20', bd=0,bg= "#ec7001", fg='#013397')
 
-            self.saque = tk.Button(root, bd=0, image=self.button_create,command=self.withdrawal)
-            self.saque.place(width=445, height=115, x=166, y=710)
+            self.saque = tk.Button(root, bd=0, image=self.button_withdrawal,command=self.withdrawal)
+            self.saque.place(width=417, height=90, x=145, y=522)
 
-            self.back = tk.Button(root, bd=0, image=self.button_create,command=self.sair)
-            self.back.place(width=365, height=97, x=176, y=890)
-            
+            self.back = tk.Button(root, bd=0, image=self.button_back,command=self.sair)
+            self.back.place(width=417, height=90, x=147, y=665)
+
+            self.saldo = Label(root, text=self.user.balance)
+            self.saldo.place(width=166, height=32, x=363, y=98)
+            self.saldo.configure(bg='#f7f91f', fg='#0231A0', font='Arieal 20')
+
+            self.hidden = True
+            self.ocult = tk.Button(root, bd=0, image=self.olho, command=self.botao_saldo)
+            self.ocult.place(width=93, height=63, x=627, y=80)
+
+    def botao_saldo(self):
+        if self.hidden == False:
+            self.saldo = Label(self.root, text = self.user.balance)
+            self.saldo.place(width=166, height=32, x=363, y=98)
+            self.saldo.configure(bg='#f7f91f', fg='#0231A0', font='Arieal 20')
+            self.hidden = True
+        
+        elif self.hidden == True:
+            self.show = Label(self.root)
+            self.show.place(width=166, height=32, x=363, y=98)
+            self.show.configure(bg='#b0b13c')
+            self.hidden = False
+
     def withdrawal(self):
-
-        if self.user.withdrawal(self.quantia.get()) == True:
+        if self.user.withdrawal(self.quantia.get()) == True: 
+            self.saldo = Label(self.root, text=self.user.balance)
+            self.saldo.place(width=166, height=32, x=363, y=98)
+            self.saldo.configure(bg='#f7f91f', fg='#0231A0', font='Arieal 20')
             print('foi de certo tudobom')
-        else:
-            print('algo deu errado na chamada')
+        else: print('algo deu errado na chamada')
 
     def sair(self):
-        if self.user.admin == False:
-            app.screen_two(self.user_id)
-        elif self.user.admin == True:
-            app.screen_three(self.user_id)
-
+        if self.user.admin == False: app.screen_two(self.user_id)
+        elif self.user.admin == True: app.screen_three(self.user_id)
 
 class TransferScreen(tk.Frame):
     def __init__(self, root, user_id, render=False):
         super().__init__(root)
         if render:
 
+            self.root = root
             self.user = Users.userwheel[user_id]
             self.user_id = user_id
 
-            self.background_register = PhotoImage(file='image/background_register.png')
-            self.button_create = PhotoImage(file='image/button_create.png')
+            self.background_transfer = PhotoImage(file='image/background_transfer.png')
+            self.button_transfer = PhotoImage(file='image/button_transfer.png')
+            self.button_back = PhotoImage(file='image/button_back.png')
             
-            #self.background = tk.Label(root, bd=0, image=self.background_register)
-            #self.background.place(width=720, height=1000, x=0, y=0)
+            self.background = tk.Label(root, bd=0, image=self.background_transfer)
+            self.background.place(width=720, height=1000, x=0, y=0)
 
             self.num = tk.Entry(root)
-            self.num.place(width=360, height=42, x=228, y=233)
+            self.num.place(width=574, height=56, x=51, y=268)
             self.num.config(font='Arieal 20', bd=0,bg= "#0231A0", fg='#ffffff')
 
             self.quantia = tk.Entry(root)
-            self.quantia.place(width=360, height=42, x=230, y=322)
+            self.quantia.place(width=569, height=55, x=53, y=438)
             self.quantia.config(font='Arieal 20', bd=0,bg= "#0231A0", fg='#ffffff')
 
             self.saldo = Label(root, text=self.user.balance)
             self.saldo.place(width=205, height=55, x=15, y=127)
             self.saldo.configure(bg='#0231a0', fg='#f7f91f', font='Arieal 20')
 
-            self.tranferir = tk.Button(root, bd=0, image=self.button_create,command=self.transfer)
-            self.tranferir.place(width=445, height=115, x=166, y=710)
+            self.tranferir = tk.Button(root, bd=0, image=self.button_transfer,command=self.transfer)
+            self.tranferir.place(width=374, height=75, x=43, y=556)
 
-            self.back = tk.Button(root, bd=0, image=self.button_create,command=self.sair)
-            self.back.place(width=365, height=97, x=176, y=890)
+            self.back = tk.Button(root, bd=0, image=self.button_back,command=self.sair)
+            self.back.place(width=370, height=72, x=45, y=660)
             
     def transfer(self):
-
         if self.user.transfer(self.quantia.get(),self.num.get()) == True:
+            self.saldo = Label(self.root, text=self.user.balance)
+            self.saldo.place(width=205, height=55, x=15, y=127)
+            self.saldo.configure(bg='#0231a0', fg='#f7f91f', font='Arieal 20')
             print('foi de certo tudobom')
-        else:
-            print('algo deu errado na chamada')
+        else: print('algo deu errado na chamada')
 
     def sair(self):
-        if self.user.admin == False:
-            app.screen_two(self.user_id)
-        elif self.user.admin == True:
-            app.screen_three(self.user_id)
-
+        if self.user.admin == False: app.screen_two(self.user_id)
+        elif self.user.admin == True: app.screen_three(self.user_id)
 
 if __name__ == "__main__":
     app = App()
     Users.create_user('user','12345678910','0',999999999,False,0,'123')
-    Users.create_user('adm','10987654321','1',888888888,True,0,'123')
+    Users.create_user('adm','10987654321','1',888888888,True,0,'1')
     app.screen_one()
     app.mainloop()
